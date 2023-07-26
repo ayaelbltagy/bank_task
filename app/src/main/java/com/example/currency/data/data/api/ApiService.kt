@@ -13,7 +13,7 @@ interface ApiService {
     @GET("symbols?access_key=${Constant.API_KEY}")
     suspend fun getAllCurrencies(): Response<AllCurrenciesResponse>
 
-    @GET("latest?access_key=${Constant.API_KEY}&symbols=USD,EUR,JPY,GBP,CNY,AUD,CAD,CHF,SGD")
+    @GET("latest?access_key=${Constant.API_KEY}&symbols=EGP,SGD,CHF,CAD,AUD,CNY,GBP,JPY,EUR,USD")
     suspend fun getLatestRates(
         @Query("base") base: String,
         @Query("symbols") array: Array<String>
