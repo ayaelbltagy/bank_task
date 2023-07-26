@@ -25,10 +25,11 @@ class mainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: FragmentMainBinding
+    private var isConvertButtonClicked = false
 
-    companion object{
+    companion object {
         var selectedCurrencyFrom = ""
-        var selectedCurrencyTo= ""
+        var selectedCurrencyTo = ""
     }
 
 
@@ -48,24 +49,50 @@ class mainFragment : Fragment() {
         binding.spinnerFrom.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newText ->
             selectedCurrencyFrom = newText
             binding.spinnerFrom.dismiss()
+            isConvertButtonClicked = false
+
+
         }
         binding.spinnerTo.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newText ->
             selectedCurrencyTo = newText
             binding.spinnerTo.dismiss()
+            isConvertButtonClicked = false
+            change(binding.input.text.toString())
+
         }
         binding.swap.setOnClickListener {
+            isConvertButtonClicked = true
             binding.spinnerTo.dismiss()
             binding.spinnerFrom.dismiss()
-            change()
+            change(binding.output.text.toString())
         }
         binding.details.setOnClickListener {
+            isConvertButtonClicked = false
             binding.spinnerTo.dismiss()
             binding.spinnerFrom.dismiss()
             Navigation.findNavController(it).navigate(R.id.mainFragment_to_detailsFragment)
         }
     }
 
-    private fun change(){
+    @SuppressLint("FragmentLiveDataObserve")
+
+    private fun change(amount: String) {
+        viewModel.convert(selectedCurrencyFrom, selectedCurrencyTo, amount).observe(this) {
+            when (it.status) {
+                SUCCESS -> {
+                    if (it.data!!.success) {
+                        if(isConvertButtonClicked){
+                            binding.input.setText(it.data.result.toString())
+                        }
+                        else{
+                            binding.output.setText(it.data.result.toString())
+                        }
+                        isConvertButtonClicked = false
+                    }
+                }
+                ERROR -> {}
+            }
+        }
 
     }
 
@@ -98,10 +125,10 @@ class mainFragment : Fragment() {
 //                            for (i in 0 until jsonArray.length()) {
 //                                listdata.add(jsonArray.getString(i))
 //
-                               binding.spinnerFrom.setItems(listCurrency)
+                        binding.spinnerFrom.setItems(listCurrency)
                         binding.spinnerTo.setItems(listCurrency)
 //                            }
-                      //  }
+                        //  }
                     }
                 }
                 ERROR -> {}

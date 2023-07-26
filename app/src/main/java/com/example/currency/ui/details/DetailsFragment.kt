@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,15 +40,14 @@ class DetailsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        var array = ArrayList<String>()
-        array.add(selectedCurrencyTo)
-        latest(selectedCurrencyFrom, array)
-        history("2023-07-26", selectedCurrencyFrom, array)
+        val tradedCurrencies = arrayOf("USD", "EUR", "JPY", "GBP", "CNY", "AUD", "CAD", "CHF", "SGD")
+        latest(selectedCurrencyFrom, tradedCurrencies)
+        history("2023-07-26", selectedCurrencyFrom, selectedCurrencyTo)
     }
 
     @SuppressLint("FragmentLiveDataObserve")
-    private fun latest(base: String, array: List<String>) {
-        viewModel.latestRates(base, array).observe(this) {
+    private fun latest(base: String, array: Array<String>) {
+         viewModel.latestRates(base, array).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {
@@ -68,8 +68,8 @@ class DetailsFragment : Fragment() {
     }
 
     @SuppressLint("FragmentLiveDataObserve")
-    private fun history(date: String, base: String, array: List<String>) {
-        viewModel.history(date, base, array).observe(this) {
+    private fun history(date: String, from: String, to:  String) {
+        viewModel.history(date, from, to).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {
