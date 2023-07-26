@@ -41,6 +41,7 @@ class DetailsFragment : Fragment() {
         var array=ArrayList<String>()
        // array.add(selectedCurrencyTo)
         latest ("",array)
+        history("2023-07-26")
     }
     @SuppressLint("FragmentLiveDataObserve")
     private fun latest (base:String, array:List<String> ) {
@@ -59,6 +60,20 @@ class DetailsFragment : Fragment() {
                         val map = rates.toMap()
                        // ratesList.
                        binding.rates.adapter= RatesAdapter(map)
+                    }
+                }
+                Status.ERROR -> {}
+            }
+        }
+    }
+    @SuppressLint("FragmentLiveDataObserve")
+    private fun history (date:String) {
+        viewModel.history(date).observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    if (it.data!!.success) {
+                        binding.date.text = "Latest rates at" + " " + it.data.date
+                        binding.base.text = it.data.base
                     }
                 }
                 Status.ERROR -> {}
