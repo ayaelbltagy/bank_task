@@ -41,13 +41,13 @@ class DetailsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         val tradedCurrencies = arrayOf("USD", "EUR", "JPY", "GBP", "CNY", "AUD", "CAD", "CHF", "SGD")
-        latest(selectedCurrencyFrom, tradedCurrencies)
+        latest(selectedCurrencyFrom)
         history("2023-07-26", selectedCurrencyFrom, selectedCurrencyTo)
     }
 
     @SuppressLint("FragmentLiveDataObserve")
-    private fun latest(base: String, array: Array<String>) {
-         viewModel.latestRates(base, array).observe(this) {
+    private fun latest(base: String) {
+         viewModel.latestRates(base).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {

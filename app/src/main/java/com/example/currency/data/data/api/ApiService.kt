@@ -15,8 +15,7 @@ interface ApiService {
 
     @GET("latest?access_key=${Constant.API_KEY}&symbols=EGP,SGD,CHF,CAD,AUD,CNY,GBP,JPY,EUR,USD")
     suspend fun getLatestRates(
-        @Query("base") base: String,
-        @Query("symbols") array: Array<String>
+        @Query("base") base: String
     ): Response<LatestRateResponse>
 
     @GET("{date}?access_key=${Constant.API_KEY}")

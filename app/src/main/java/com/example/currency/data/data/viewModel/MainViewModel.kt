@@ -40,11 +40,11 @@ class MainViewModel @Inject constructor(
         return response
     }
 
-    fun latestRates(base:String,array:Array<String>): LiveData<Resource<LatestRateResponse>> {
+    fun latestRates(base:String): LiveData<Resource<LatestRateResponse>> {
         val response = MutableLiveData<Resource<LatestRateResponse>>()
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                mainRepository.latestRates(base,array).let {
+                mainRepository.latestRates(base).let {
                     if (it.isSuccessful) {
                         response.postValue(Resource.success(it.body(), ""))
                     } else {
