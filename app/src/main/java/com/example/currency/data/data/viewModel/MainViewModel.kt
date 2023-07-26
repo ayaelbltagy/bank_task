@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.http.Query
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,11 +39,11 @@ class MainViewModel @Inject constructor(
         return response
     }
 
-    fun latestRates( ): LiveData<Resource<LatestRateResponse>> {
+    fun latestRates(base:String,array:List<String>): LiveData<Resource<LatestRateResponse>> {
         val response = MutableLiveData<Resource<LatestRateResponse>>()
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                mainRepository.latestRates(  ).let {
+                mainRepository.latestRates(base,array).let {
                     if (it.isSuccessful) {
                         response.postValue(Resource.success(it.body(), ""))
                     } else {
@@ -54,11 +55,11 @@ class MainViewModel @Inject constructor(
         }
         return response
     }
-    fun history(date:String): LiveData<Resource<HistoryResponse>> {
+    fun history(date:String,base:String,array:List<String>): LiveData<Resource<HistoryResponse>> {
         val response = MutableLiveData<Resource<HistoryResponse>>()
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
-                mainRepository.getHistory(date).let {
+                mainRepository.getHistory(date,base,array).let {
                     if (it.isSuccessful) {
                         response.postValue(Resource.success(it.body(), ""))
                     } else {

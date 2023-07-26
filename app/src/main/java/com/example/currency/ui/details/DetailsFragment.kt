@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.currency.data.data.viewModel.MainViewModel
 import com.example.currency.databinding.FragmentDetailBinding
 import com.example.currency.helpers.Status
+import com.example.currency.ui.mainFragment.Companion.selectedCurrencyFrom
+import com.example.currency.ui.mainFragment.Companion.selectedCurrencyTo
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
@@ -38,37 +39,37 @@ class DetailsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        var array=ArrayList<String>()
-       // array.add(selectedCurrencyTo)
-        latest ("",array)
-        history("2023-07-26")
+        var array = ArrayList<String>()
+        array.add(selectedCurrencyTo)
+        latest(selectedCurrencyFrom, array)
+        history("2023-07-26", selectedCurrencyFrom, array)
     }
+
     @SuppressLint("FragmentLiveDataObserve")
-    private fun latest (base:String, array:List<String> ) {
-        viewModel.latestRates( ).observe(this) {
+    private fun latest(base: String, array: List<String>) {
+        viewModel.latestRates(base, array).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {
                         binding.date.text = "Latest rates at" + " " + it.data.date
                         binding.base.text = it.data.base
                         binding.rates.layoutManager = LinearLayoutManager(requireContext())
-                        var ratesList = HashMap<String, String>()
                         var gson = Gson()
                         var jsonString = gson.toJson(it.data)
                         val jsonObj = JSONObject(jsonString)
                         val rates = jsonObj.getJSONObject("rates")
                         val map = rates.toMap()
-                       // ratesList.
-                       binding.rates.adapter= RatesAdapter(map)
+                        binding.rates.adapter = RatesAdapter(map)
                     }
                 }
                 Status.ERROR -> {}
             }
         }
     }
+
     @SuppressLint("FragmentLiveDataObserve")
-    private fun history (date:String) {
-        viewModel.history(date).observe(this) {
+    private fun history(date: String, base: String, array: List<String>) {
+        viewModel.history(date, base, array).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {
@@ -80,17 +81,16 @@ class DetailsFragment : Fragment() {
             }
         }
     }
+
     fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
-        when (val value = this[it])
-        {
-            is JSONArray ->
-            {
+        when (val value = this[it]) {
+            is JSONArray -> {
                 val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
                 JSONObject(map).toMap().values.toList()
             }
             is JSONObject -> value.toMap()
             JSONObject.NULL -> null
-            else            -> value
+            else -> value
         }
     }
 }

@@ -12,12 +12,23 @@ interface ApiService {
     @GET("symbols?access_key=0d1a3e7af52c268e9ad4e1598a0a1053")
     suspend fun getAllCurrencies(): Response<AllCurrenciesResponse>
 
-    @GET("latest?access_key=0d1a3e7af52c268e9ad4e1598a0a1053&base=EUR&symbols=")
-  //  suspend fun getLatestRates(@Query("base") base:String,@Query("symbols") array:List<String>): Response<LatestRateResponse>
-    suspend fun getLatestRates( ): Response<LatestRateResponse>
+    @GET("latest?access_key=0d1a3e7af52c268e9ad4e1598a0a1053&&")
+    suspend fun getLatestRates(
+        @Query("base") base: String,
+        @Query("symbols") array: List<String>
+    ): Response<LatestRateResponse>
 
-    @GET("{date}?access_key=0d1a3e7af52c268e9ad4e1598a0a1053&base=EUR&symbols=")
-    suspend fun getHistory(@Path("date")date:String): Response<HistoryResponse>
+    @GET("{date}?access_key=0d1a3e7af52c268e9ad4e1598a0a1053&&")
+    suspend fun getHistory(
+        @Path("date") date: String,
+        @Query("base") base: String,
+        @Query("symbols") array: List<String>
+    ): Response<HistoryResponse>
 
-
+    @GET("convert?access_key=0d1a3e7af52c268e9ad4e1598a0a1053&&&")
+    suspend fun convert(
+        @Query("from") from: String,
+        @Query("to") to: String,
+        @Query("amount") amount: String
+    )
 }

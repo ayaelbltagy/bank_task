@@ -8,7 +8,7 @@ import retrofit2.Response
 interface ApiHelper {
 
     suspend fun getCurrencies( ): Response<AllCurrenciesResponse>
-    suspend fun getRates( ) :Response<LatestRateResponse>
-    suspend fun getHistory(date:String):Response<HistoryResponse>
+    suspend fun getRates(base:String,array:List<String>) :Response<LatestRateResponse>
+    suspend fun getHistory(date:String, base:String,array:List<String>):Response<HistoryResponse>
 
 }

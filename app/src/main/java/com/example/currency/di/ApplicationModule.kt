@@ -31,7 +31,7 @@ class ApplicationModule {
     private val TIMEOUT_READ = 30   //In seconds
 
     @Provides
-    fun provideBaseUrl() = "http://data.fixer.io/api/"
+    fun provideBaseUrl() = "https://data.fixer.io/api/"
 
     private val okHttpBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
 
