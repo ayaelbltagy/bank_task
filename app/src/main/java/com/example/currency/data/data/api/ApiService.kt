@@ -1,15 +1,15 @@
 package com.example.currency.data.data.api
 
-import com.example.currency.data.data.models.AllCurrenciesResponse
-import com.example.currency.data.data.models.ConvertResponse
-import com.example.currency.data.data.models.HistoryResponse
-import com.example.currency.data.data.models.LatestRateResponse
+import com.example.currency.data.data.models.*
+import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+
 interface ApiService {
+
     @GET("symbols?access_key=${Constant.API_KEY}")
     suspend fun getAllCurrencies(): Response<AllCurrenciesResponse>
 

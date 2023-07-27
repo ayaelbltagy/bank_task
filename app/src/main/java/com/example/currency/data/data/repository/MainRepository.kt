@@ -1,12 +1,9 @@
 package com.example.currency.data.data.repository
 
 import com.example.currency.data.data.api.ApiHelper
-import com.example.currency.data.data.models.AllCurrenciesResponse
-import com.example.currency.data.data.models.ConvertResponse
-import com.example.currency.data.data.models.HistoryResponse
-import com.example.currency.data.data.models.LatestRateResponse
+import com.example.currency.data.data.api.ApiService
+import com.example.currency.data.data.models.*
 import retrofit2.Response
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(private val apiHelper: ApiHelper) {

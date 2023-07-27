@@ -11,6 +11,6 @@ data class HistoryResponse(
     data class Rates(
         val USD: Double,
         val CAD: Double,
-        val EUR: Int
+        val EUR: Double
     )
 }
