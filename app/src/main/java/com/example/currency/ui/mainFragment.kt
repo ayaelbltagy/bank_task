@@ -70,7 +70,13 @@ class mainFragment : Fragment() {
             isConvertButtonClicked = false
             binding.spinnerTo.dismiss()
             binding.spinnerFrom.dismiss()
-            Navigation.findNavController(it).navigate(R.id.mainFragment_to_detailsFragment)
+            if(selectedCurrencyFrom.equals("") ||selectedCurrencyTo.equals("")){
+                Toast.makeText(requireContext(),"Please select from - to currencies",Toast.LENGTH_LONG).show()
+            }
+            else{
+                Navigation.findNavController(it).navigate(R.id.mainFragment_to_detailsFragment)
+
+            }
         }
     }
 
@@ -112,23 +118,9 @@ class mainFragment : Fragment() {
                             val key = keys.next()
                             listCurrency.add(key)
                         }
-
-//                        val x: Iterator<String> = symbols.keys()
-//                        val jsonArray = JSONArray()
-//                        while (x.hasNext()) {
-//                            val key = x.next()
-//                            jsonArray.put(symbols[key])
-//                        }
-
-//                        val listdata = ArrayList<String>()
-//                        if (jsonArray != null) {
-//                            for (i in 0 until jsonArray.length()) {
-//                                listdata.add(jsonArray.getString(i))
-//
                         binding.spinnerFrom.setItems(listCurrency)
                         binding.spinnerTo.setItems(listCurrency)
-//                            }
-                        //  }
+
                     }
                 }
                 ERROR -> {}
