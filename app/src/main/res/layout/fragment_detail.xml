@@ -6,12 +6,58 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/txt_currency_code_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black"
+            tools:text="USD" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textColor="@color/black" />
+
+
+        <TextView
+            android:id="@+id/txt_currency_code_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            tools:text="EUR" />
+    </LinearLayout>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="20dp"
+        tools:ignore="MissingClass" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="150dp"
         android:layout_marginEnd="10dp">
+
         <!-- history-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -135,8 +181,8 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/design_default_color_primary_dark"
-                android:textColorHint="@color/design_default_color_primary_dark"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="15sp" />
 
             <TextView
@@ -147,8 +193,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/shadow"
                 android:gravity="center"
-                android:textColor="@color/design_default_color_primary_dark"
-                android:textColorHint="@color/design_default_color_primary_dark"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textSize="15sp" />
 
             <androidx.recyclerview.widget.RecyclerView

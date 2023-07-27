@@ -38,7 +38,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
 }
+
+
 
 dependencies {
 
@@ -79,5 +82,9 @@ dependencies {
 
     // Spinner style
     implementation "com.github.skydoves:powerspinner:1.2.4"
+
+    // chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 }
