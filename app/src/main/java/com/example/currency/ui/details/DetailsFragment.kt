@@ -51,7 +51,10 @@ class DetailsFragment : Fragment() {
         binding.today.setText(Constant.getCurrentDate())
         binding.yesterday.setText(Constant.getLastDay())
         binding.last.setText(Constant.getLast2Days())
-        historyToday(Constant.getCurrentDate(), selectedCurrencyFrom, selectedCurrencyTo)
+        binding.from.setText(selectedCurrencyFrom)
+        history (Constant.getCurrentDate(), selectedCurrencyFrom, selectedCurrencyTo)
+        history (Constant.getLastDay(), selectedCurrencyFrom, selectedCurrencyTo)
+        history (Constant.getLast2Days(), selectedCurrencyFrom, selectedCurrencyTo)
 
     }
 
@@ -77,8 +80,9 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("FragmentLiveDataObserve")
-    private fun historyToday(date: String, from: String, to: String) {
+    private fun history(date: String, from: String, to: String) {
         viewModel.history(date, from, to).observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -87,25 +91,13 @@ class DetailsFragment : Fragment() {
                         var jsonString = gson.toJson(it.data)
                         val jsonObj = JSONObject(jsonString)
                         val rates = jsonObj.getJSONObject("rates")
-                        Log.e("errorObject",rates.toString())
-//                        val x: Iterator<String> = rates.keys()
-//                        val jsonArray = JSONArray()
-//                        while (x.hasNext()) {
-//                            val key = x.next()
-//                            jsonArray.put(rates[key])
-//                        }
-//
-//                        val listdata = ArrayList<String>()
-//                        if (jsonArray != null) {
-//                            for (i in 0 until jsonArray.length()) {
-//                                listdata.add(jsonArray.getString(i))
-//
-//                            }
-//                        }
                         val map = rates.toMap()
                         var values = map.values.toList()
-                        binding.from.setText(selectedCurrencyFrom)
-                        binding.to.setText(selectedCurrencyTo + " "+":" +" "+ values.get(0))
+                        when(it.data.date){
+                            Constant.getCurrentDate()->{ binding.to.setText(selectedCurrencyTo + " "+":" +" "+ values.get(0)) }
+                            Constant.getLastDay()->{binding.toYesterday.setText(selectedCurrencyTo + " "+":" +" "+ values.get(0))}
+                            Constant.getLast2Days()->{binding.toLast.setText(selectedCurrencyTo + " "+":" +" "+ values.get(0))}
+                        }
                     }
                 }
                 Status.ERROR -> {}

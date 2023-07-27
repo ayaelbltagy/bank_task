@@ -4,17 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.currency.data.data.api.ApiService
 import com.example.currency.data.data.models.*
 import com.example.currency.data.data.repository.MainRepository
 import com.example.currency.helpers.NetworkHelper
 import com.example.currency.helpers.Resource
-import com.example.currency.helpers.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel

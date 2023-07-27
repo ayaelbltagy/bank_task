@@ -24,10 +24,10 @@ object Constant {
         val date = Date()
         val calendar = Calendar.getInstance()
         calendar.time = date
-        calendar.add(Calendar.DAY_OF_WEEK,1)
+        calendar.add(Calendar.DAY_OF_WEEK,-1)
         val newDate = calendar.time
-        val y: String = formatter.format(newDate)
-        return y
+        val formatDate: String = formatter.format(newDate)
+        return formatDate
     }
 
     fun getLast2Days(): String {
@@ -35,10 +35,10 @@ object Constant {
         val date = Date()
         val calendar = Calendar.getInstance()
         calendar.time = date
-        calendar.add(Calendar.DAY_OF_WEEK,2)
+        calendar.add(Calendar.DAY_OF_WEEK,-2)
         val newDate = calendar.time
-        val y: String = formatter.format(newDate)
-        return y
+        val formatDate: String = formatter.format(newDate)
+        return formatDate
     }
 
 }
