@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.currency.data.data.api.Constant
 import com.example.currency.data.data.models.AllCurrenciesResponse
 import com.example.currency.data.data.models.ConvertResponse
 import com.example.currency.data.data.models.HistoryResponse
@@ -16,12 +17,16 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.http.Query
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
      private val mainRepository: MainRepository,
      private val networkHelper: NetworkHelper) : ViewModel() {
+
+
 
      fun currencies( ): LiveData<Resource<AllCurrenciesResponse>> {
         val response = MutableLiveData<Resource<AllCurrenciesResponse>>()
@@ -56,6 +61,7 @@ class MainViewModel @Inject constructor(
         }
         return response
     }
+
     fun history(date:String,from:String,to:String): LiveData<Resource<HistoryResponse>> {
         val response = MutableLiveData<Resource<HistoryResponse>>()
         viewModelScope.launch {
@@ -89,4 +95,11 @@ class MainViewModel @Inject constructor(
         }
         return response
     }
+
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat("yyyy-MM-dd")
+    val today = formatter.format(time)
+
+
+
 }

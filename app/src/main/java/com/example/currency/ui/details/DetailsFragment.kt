@@ -18,6 +18,8 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -39,10 +41,9 @@ class DetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        val tradedCurrencies = arrayOf("USD", "EUR", "JPY", "GBP", "CNY", "AUD", "CAD", "CHF", "SGD")
         latest(selectedCurrencyFrom)
-        history("2023-07-26", selectedCurrencyFrom, selectedCurrencyTo)
+
+      //  history(current, selectedCurrencyFrom, selectedCurrencyTo)
     }
 
     @SuppressLint("FragmentLiveDataObserve")
@@ -73,8 +74,9 @@ class DetailsFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {
-                        binding.date.text = "Latest rates at" + " " + it.data.date
-                        binding.base.text = it.data.base
+                        when(it){
+
+                        }
                     }
                 }
                 Status.ERROR -> {}
@@ -92,5 +94,11 @@ class DetailsFragment : Fragment() {
             JSONObject.NULL -> null
             else -> value
         }
+    }
+
+    fun getDaysAgo(daysAgo: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
+        return calendar.time
     }
 }
