@@ -226,12 +226,12 @@ class DetailsFragment : Fragment() {
         lineDataSet2.mode = LineDataSet.Mode.LINEAR
        lineDataSet2.setDrawFilled(true)
 
-        dataSets.add(lineDataSet)
         dataSets.add(lineDataSet2)
+        dataSets.add(lineDataSet)
 
 
         val xAxis = binding.lineChart.xAxis
-        xAxis.valueFormatter = MyValueFormatter( )
+        xAxis.valueFormatter = MyValueFormatter()
         xAxis.isGranularityEnabled = true
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.labelCount = 3
@@ -243,7 +243,6 @@ class DetailsFragment : Fragment() {
         binding.lineChart.enableScroll()
         binding.lineChart.isDragEnabled = true
         binding.lineChart.setScaleEnabled(true)
-        binding.lineChart.setPinchZoom(true)
         binding.lineChart.isEnabled = true
         binding.lineChart.data = lineData
         if (listOfRatesFrom.size == 3 && listOfRatesTo.size == 3) {
@@ -274,7 +273,6 @@ class DetailsFragment : Fragment() {
                 0f-> Constant.getCurrentDate()
                 1f -> Constant.getLastDay()
                 2f -> Constant.getLast2Days()
-
                 else -> ""
             }
         }
