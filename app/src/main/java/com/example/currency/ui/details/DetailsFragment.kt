@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,10 +21,12 @@ import com.example.currency.databinding.FragmentDetailBinding
 import com.example.currency.helpers.Status
 import com.example.currency.ui.mainFragment.Companion.selectedCurrencyFrom
 import com.example.currency.ui.mainFragment.Companion.selectedCurrencyTo
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.gson.Gson
@@ -36,6 +40,8 @@ class DetailsFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: FragmentDetailBinding
+    private lateinit var listOfRatesTo: ArrayList<Entry>
+    private lateinit var listOfRatesFrom: ArrayList<Entry>
 
 
     override fun onCreateView(
@@ -52,8 +58,11 @@ class DetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        listOfRatesTo = ArrayList<Entry>()
+        listOfRatesFrom = ArrayList<Entry>()
+
         latest(selectedCurrencyFrom)
-         binding.txtCurrencyCodeFrom.setText(selectedCurrencyFrom)
+        binding.txtCurrencyCodeFrom.setText(selectedCurrencyFrom)
         binding.txtCurrencyCodeTo.setText(selectedCurrencyTo)
         binding.today.setText(Constant.getCurrentDate())
         binding.yesterday.setText(Constant.getLastDay())
@@ -62,6 +71,10 @@ class DetailsFragment : Fragment() {
         history(Constant.getCurrentDate(), selectedCurrencyFrom, selectedCurrencyTo)
         history(Constant.getLastDay(), selectedCurrencyFrom, selectedCurrencyTo)
         history(Constant.getLast2Days(), selectedCurrencyFrom, selectedCurrencyTo)
+        historyToFrom(Constant.getCurrentDate(), selectedCurrencyTo, selectedCurrencyFrom)
+        historyToFrom(Constant.getLastDay(), selectedCurrencyTo, selectedCurrencyFrom)
+        historyToFrom(Constant.getLast2Days(), selectedCurrencyTo, selectedCurrencyFrom)
+
 
     }
 
@@ -71,7 +84,7 @@ class DetailsFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     if (it.data!!.success) {
-                        binding.date.text = "Latest rates at" + " " + it.data.date
+                        binding.date.text = " 10 popular currencies" + " " + it.data.date
                         binding.base.text = it.data.base
                         binding.rates.layoutManager = LinearLayoutManager(requireContext())
                         var gson = Gson()
@@ -100,36 +113,80 @@ class DetailsFragment : Fragment() {
                         val rates = jsonObj.getJSONObject("rates")
                         val map = rates.toMap()
                         var values = map.values.toList()
-                        val listOfRatesTo = arrayListOf<Entry>()
 
                         when (it.data.date) {
 
                             Constant.getCurrentDate() -> {
-                                binding.to.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0))
                                 listOfRatesTo.add(Entry(0f, values.get(0).toString().toFloat()))
+                                binding.to.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
+                                )
+                                setLineChart()
+
                             }
                             Constant.getLastDay() -> {
-                                binding.toYesterday.setText(
-                                    selectedCurrencyTo + " " + ":" + " " + values.get(0))
-                                listOfRatesTo.add(Entry(1f,  values.get(0).toString().toFloat()))
+                                listOfRatesTo.add(Entry(1f, values.get(0).toString().toFloat()))
+                                binding.toYesterday.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
+                                )
+                                setLineChart()
+
                             }
                             Constant.getLast2Days() -> {
-                                binding.toLast.setText(
-                                    selectedCurrencyTo + " " + ":" + " " + values.get(0))
-                                listOfRatesTo.add(Entry(2f,  values.get(0).toString().toFloat()))
+                                listOfRatesTo.add(Entry(2f, values.get(0).toString().toFloat()))
+                                binding.toLast.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
+                                )
+                                setLineChart()
+
                             }
                         }
-                        val dates = arrayListOf<String>()
-                        dates.add(Constant.getCurrentDate())
-                        dates.add(Constant.getLastDay())
-                        dates.add(Constant.getLast2Days())
 
-                        setLineChart(dates, listOfRatesTo)
                     }
                 }
                 Status.ERROR -> {}
             }
         }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("FragmentLiveDataObserve")
+    private fun historyToFrom(date: String, from: String, to: String) {
+        viewModel.history(date, from, to).observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    if (it.data!!.success) {
+                        var gson = Gson()
+                        var jsonString = gson.toJson(it.data)
+                        val jsonObj = JSONObject(jsonString)
+                        val rates = jsonObj.getJSONObject("rates")
+                        val map = rates.toMap()
+                        var values = map.values.toList()
+
+                        when (it.data.date) {
+
+                            Constant.getCurrentDate() -> {
+                                listOfRatesFrom.add(Entry(0f, values.get(0).toString().toFloat()))
+                                setLineChart()
+
+                            }
+                            Constant.getLastDay() -> {
+                                listOfRatesFrom.add(Entry(1f, values.get(0).toString().toFloat()))
+                                setLineChart()
+
+                            }
+                            Constant.getLast2Days() -> {
+                                listOfRatesFrom.add(Entry(2f, values.get(0).toString().toFloat()))
+                                setLineChart()
+
+                            }
+                        }
+
+                    }
+
+                }
+                Status.ERROR -> {}
+            }
+        }
+
     }
 
     fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
@@ -145,47 +202,83 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun setLineChart(
-        dates: List<String>,
-        listOfRatesTo: ArrayList<Entry>
-    ) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setLineChart() {
+
+
         binding.lineChart.setDragEnabled(true)
         binding.lineChart.setScaleEnabled(false)
-
-        val lineDataSet = LineDataSet(listOfRatesTo, selectedCurrencyTo)
-        lineDataSet.fillAlpha = 110
-        lineDataSet.color = Color.CYAN
-        lineDataSet.valueTextSize = 8f
-        lineDataSet.valueTextColor = Color.CYAN
-        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-        lineDataSet.setDrawFilled(true)
-        lineDataSet.fillColor = ContextCompat.getColor(requireContext(), R.color.teal_200)
-
         val dataSets = arrayListOf<ILineDataSet>()
+
+         val lineDataSet = LineDataSet(listOfRatesTo, selectedCurrencyFrom)
+        lineDataSet.fillAlpha = 110
+        lineDataSet.color = Color.GRAY
+        lineDataSet.valueTextSize = 8f
+        lineDataSet.valueTextColor = Color.GRAY
+        lineDataSet.mode = LineDataSet.Mode.LINEAR
+         lineDataSet.setDrawFilled(true)
+
+         val lineDataSet2 = LineDataSet(listOfRatesFrom, selectedCurrencyTo)
+        lineDataSet2.fillAlpha = 110
+        lineDataSet2.color = Color.RED
+        lineDataSet2.valueTextSize = 8f
+        lineDataSet2.valueTextColor = Color.RED
+        lineDataSet2.mode = LineDataSet.Mode.LINEAR
+       lineDataSet2.setDrawFilled(true)
+
         dataSets.add(lineDataSet)
+        dataSets.add(lineDataSet2)
+
+
+        val dates = arrayListOf<String>()
+        dates.add(Constant.getCurrentDate())
+        dates.add(Constant.getLastDay())
+        dates.add(Constant.getLast2Days())
 
         val xAxis = binding.lineChart.xAxis
-        xAxis.valueFormatter = XAxisValueFormatter(dates.toList())
-        xAxis.granularity = 1f
+        xAxis.valueFormatter = MyValueFormatter(dates)
+       // xAxis.granularity = 1f
+        xAxis.isGranularityEnabled = true
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.labelCount = 5
-        xAxis.labelRotationAngle = -45f
-        xAxis.mAxisMinimum = 0f
+        xAxis.labelCount = 3
+        xAxis.labelRotationAngle = -90f
+
         binding.lineChart.setDescription(null)
         val lineData = LineData(dataSets)
         lineData.setDrawValues(true)
+        binding.lineChart.enableScroll()
+        binding.lineChart.isEnabled = true
         binding.lineChart.data = lineData
-        binding.lineChart.invalidate()
+        if (listOfRatesFrom.size == 3 && listOfRatesTo.size == 3) {
+            binding.lineChart.invalidate()
+            Log.e("ListFrom", listOfRatesFrom.get(0).toString())
+            Log.e("ListFrom", listOfRatesFrom.get(1).toString())
+            Log.e("ListFrom", listOfRatesFrom.get(2).toString())
 
-
-    }
-
-    class XAxisValueFormatter(private val values: List<String>) : ValueFormatter() {
-        override fun getFormattedValue(value: Float): String {
-            val intValue = value.toInt()
-
-            return if (values.size > intValue && intValue >= 0) values.get(intValue) else ""
+            Log.e("ListTo", listOfRatesTo.get(0).toString())
+            Log.e("ListTo", listOfRatesTo.get(1).toString())
+            Log.e("ListTo", listOfRatesTo.get(2).toString())
 
         }
+
+
     }
+
+
+    class MyValueFormatter(private val xValsDateLabel: ArrayList<String>) : ValueFormatter() {
+
+        override fun getFormattedValue(value: Float): String {
+            return value.toString()
+        }
+
+        override fun getAxisLabel(value: Float, axis: AxisBase): String {
+            if (value.toInt() >= 0 && value.toInt() <= xValsDateLabel.size - 1) {
+                return xValsDateLabel[value.toInt()]
+            } else {
+                return ("").toString()
+            }
+        }
+    }
+
+
 }
