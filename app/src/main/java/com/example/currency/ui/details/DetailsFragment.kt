@@ -212,6 +212,7 @@ class DetailsFragment : Fragment() {
 
          val lineDataSet = LineDataSet(listOfRatesTo, selectedCurrencyFrom)
         lineDataSet.fillAlpha = 110
+        lineDataSet.lineWidth = 2f
         lineDataSet.color = Color.GRAY
         lineDataSet.valueTextSize = 8f
         lineDataSet.valueTextColor = Color.GRAY
@@ -220,6 +221,7 @@ class DetailsFragment : Fragment() {
 
          val lineDataSet2 = LineDataSet(listOfRatesFrom, selectedCurrencyTo)
         lineDataSet2.fillAlpha = 110
+        lineDataSet2.lineWidth = 2f
         lineDataSet2.color = Color.RED
         lineDataSet2.valueTextSize = 8f
         lineDataSet2.valueTextColor = Color.RED
