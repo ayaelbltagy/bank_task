@@ -230,14 +230,8 @@ class DetailsFragment : Fragment() {
         dataSets.add(lineDataSet2)
 
 
-        val dates = arrayListOf<String>()
-        dates.add(Constant.getCurrentDate())
-        dates.add(Constant.getLastDay())
-        dates.add(Constant.getLast2Days())
-
         val xAxis = binding.lineChart.xAxis
-        xAxis.valueFormatter = MyValueFormatter(dates)
-       // xAxis.granularity = 1f
+        xAxis.valueFormatter = MyValueFormatter( )
         xAxis.isGranularityEnabled = true
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.labelCount = 3
@@ -247,6 +241,9 @@ class DetailsFragment : Fragment() {
         val lineData = LineData(dataSets)
         lineData.setDrawValues(true)
         binding.lineChart.enableScroll()
+        binding.lineChart.isDragEnabled = true
+        binding.lineChart.setScaleEnabled(true)
+        binding.lineChart.setPinchZoom(true)
         binding.lineChart.isEnabled = true
         binding.lineChart.data = lineData
         if (listOfRatesFrom.size == 3 && listOfRatesTo.size == 3) {
@@ -265,17 +262,20 @@ class DetailsFragment : Fragment() {
     }
 
 
-    class MyValueFormatter(private val xValsDateLabel: ArrayList<String>) : ValueFormatter() {
+    class MyValueFormatter() : ValueFormatter() {
 
         override fun getFormattedValue(value: Float): String {
             return value.toString()
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun getAxisLabel(value: Float, axis: AxisBase): String {
-            if (value.toInt() >= 0 && value.toInt() <= xValsDateLabel.size - 1) {
-                return xValsDateLabel[value.toInt()]
-            } else {
-                return ("").toString()
+            return when (value) {
+                0f-> Constant.getCurrentDate()
+                1f -> Constant.getLastDay()
+                2f -> Constant.getLast2Days()
+
+                else -> ""
             }
         }
     }
