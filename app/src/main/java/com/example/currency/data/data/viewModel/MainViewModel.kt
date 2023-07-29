@@ -23,7 +23,7 @@ class MainViewModel @Inject constructor(
     fun currencies(): LiveData<Resource<AllCurrenciesResponse>> {
         val response = MutableLiveData<Resource<AllCurrenciesResponse>>()
         viewModelScope.launch {
-           // if (networkHelper.isNetworkConnected()) {
+            if (networkHelper.isNetworkConnected()) {
                 mainRepository.allCurrencies().let {
                     if (it.isSuccessful) {
                         response.postValue(Resource.success(it.body(), ""))
@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
                         response.postValue(Resource.error(jsonObj["message"].toString(), null))
                     }
                 }
-         //   } else response.postValue(Resource.error("No internet connection", null))
+            } else response.postValue(Resource.error("No internet connection", null))
         }
         return response
     }

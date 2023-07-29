@@ -118,21 +118,24 @@ class DetailsFragment : Fragment() {
 
                             Constant.getCurrentDate() -> {
                                 listOfRatesTo.add(Entry(0f, values.get(0).toString().toFloat()))
-                                binding.to.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
+                                binding.to.setText(
+                                    selectedCurrencyTo + " " + ":" + " " + values.get(0)
                                 )
-                               setLineChart()
+                                setLineChart()
 
                             }
                             Constant.getLastDay() -> {
                                 listOfRatesTo.add(Entry(1f, values.get(0).toString().toFloat()))
-                                binding.toYesterday.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
+                                binding.toYesterday.setText(
+                                    selectedCurrencyTo + " " + ":" + " " + values.get(0)
                                 )
-                              setLineChart()
+                                setLineChart()
 
                             }
                             Constant.getLast2Days() -> {
                                 listOfRatesTo.add(Entry(2f, values.get(0).toString().toFloat()))
-                                binding.toLast.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
+                                binding.toLast.setText(
+                                    selectedCurrencyTo + " " + ":" + " " + values.get(0)
                                 )
                                 setLineChart()
 
@@ -209,14 +212,14 @@ class DetailsFragment : Fragment() {
         binding.lineChart.setScaleEnabled(false)
         val dataSets = arrayListOf<ILineDataSet>()
 
-         val lineDataSet = LineDataSet(listOfRatesTo, selectedCurrencyFrom)
+        val lineDataSet = LineDataSet(listOfRatesTo, selectedCurrencyFrom)
         lineDataSet.fillAlpha = 110
         lineDataSet.lineWidth = 2f
         lineDataSet.color = Color.GRAY
         lineDataSet.valueTextSize = 8f
         lineDataSet.valueTextColor = Color.GRAY
         lineDataSet.mode = LineDataSet.Mode.LINEAR
-         lineDataSet.setDrawFilled(true)
+        lineDataSet.setDrawFilled(true)
         lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT)
 
 
@@ -227,7 +230,7 @@ class DetailsFragment : Fragment() {
         lineDataSet2.valueTextSize = 8f
         lineDataSet2.valueTextColor = Color.RED
         lineDataSet2.mode = LineDataSet.Mode.LINEAR
-       lineDataSet2.setDrawFilled(true)
+        lineDataSet2.setDrawFilled(true)
         lineDataSet2.setAxisDependency(YAxis.AxisDependency.LEFT)
 
 
@@ -254,29 +257,27 @@ class DetailsFragment : Fragment() {
         binding.lineChart.isEnabled = true
         binding.lineChart.data = lineData
 
-
         if (listOfRatesFrom.size == 3 && listOfRatesTo.size == 3) {
-            Collections.sort(listOfRatesFrom , EntryXComparator())
-            Collections.sort(listOfRatesTo , EntryXComparator())
+            Collections.sort(listOfRatesFrom, EntryXComparator())
+            Collections.sort(listOfRatesTo, EntryXComparator())
 
             binding.lineChart.invalidate()
 
         }
-
-
     }
 
-     class MyValueFormatter() : ValueFormatter() {
+    class MyValueFormatter() : ValueFormatter() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun getAxisLabel(value: Float, axis: AxisBase): String {
             return when (value) {
-                0f-> Constant.getCurrentDate()
+                0f -> Constant.getCurrentDate()
                 1f -> Constant.getLastDay()
                 2f -> Constant.getLast2Days()
                 else -> ""
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
         (activity as AppCompatActivity?)!!.supportActionBar!!.show()

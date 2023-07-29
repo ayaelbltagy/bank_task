@@ -72,10 +72,13 @@ class mainFragment : Fragment() {
             isConvertButtonClicked = false
             binding.spinnerTo.dismiss()
             binding.spinnerFrom.dismiss()
-            if(selectedCurrencyFrom.equals("") ||selectedCurrencyTo.equals("")){
-                Toast.makeText(requireContext(),"Please select from - to currencies",Toast.LENGTH_LONG).show()
-            }
-            else{
+            if (selectedCurrencyFrom.equals("") || selectedCurrencyTo.equals("")) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please select from - to currencies",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
                 Navigation.findNavController(it).navigate(R.id.mainFragment_to_detailsFragment)
 
             }
@@ -89,10 +92,9 @@ class mainFragment : Fragment() {
             when (it.status) {
                 SUCCESS -> {
                     if (it.data!!.success) {
-                        if(isConvertButtonClicked){
+                        if (isConvertButtonClicked) {
                             binding.input.setText(it.data.result.toString())
-                        }
-                        else{
+                        } else {
                             binding.output.setText(it.data.result.toString())
                         }
                         isConvertButtonClicked = false

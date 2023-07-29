@@ -41,23 +41,23 @@ class ApplicationModule {
         request.method(original.method, original.body)
 
         try {
-             if (!isNetworkConnected()) {
-                 throw IOException("Network not connected")
+            if (!isNetworkConnected()) {
+                throw IOException("Network not connected")
             }
 
             val response = chain.proceed(request.build())
 
             response
         } catch (e: SSLException) {
-             e.printStackTrace()
-             throw IOException("SSLException occurred: ${e.message}")
+            e.printStackTrace()
+            throw IOException("SSLException occurred: ${e.message}")
         } catch (e: IOException) {
-             e.printStackTrace()
-             throw e
+            e.printStackTrace()
+            throw e
         }
     }
 
-     @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission")
     private fun isNetworkConnected(): Boolean {
         val connectivityManager =
             MainActivity.activity.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager

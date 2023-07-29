@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.currency.R
 import com.example.currency.databinding.RateItemBinding
 
-class RatesAdapter (private val ratesList: Map<String, *>) : RecyclerView.Adapter<RatesAdapter.ViewHolder>() {
+class RatesAdapter(private val ratesList: Map<String, *>) :
+    RecyclerView.Adapter<RatesAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(@NonNull val itemBinding: RateItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = RateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
 
@@ -28,11 +28,10 @@ class RatesAdapter (private val ratesList: Map<String, *>) : RecyclerView.Adapte
         holder.itemBinding.key.text = listKey.get(position)
         holder.itemBinding.value.text = listValues.get(position).toString()
 
-     }
+    }
 
 
     override fun getItemCount(): Int = ratesList.size
-
 
 
 }

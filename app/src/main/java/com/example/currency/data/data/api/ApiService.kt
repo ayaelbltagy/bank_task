@@ -22,7 +22,7 @@ interface ApiService {
     suspend fun getHistory(
         @Path("date") date: String,
         @Query("base") base: String,
-        @Query("symbols") array:  String
+        @Query("symbols") array: String
     ): Response<HistoryResponse>
 
     @GET("convert?access_key=${Constant.API_KEY}")
@@ -30,5 +30,5 @@ interface ApiService {
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("amount") amount: String
-    ):Response<ConvertResponse>
+    ): Response<ConvertResponse>
 }

@@ -18,7 +18,7 @@ data class LatestRateResponse(
         val CAD: Double,
         val CHF: Double,
         val SGD: Double,
-        val EGP :Double
+        val EGP: Double
 
     )
 }

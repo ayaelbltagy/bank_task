@@ -24,7 +24,7 @@ object Constant {
         val date = Date()
         val calendar = Calendar.getInstance()
         calendar.time = date
-        calendar.add(Calendar.DAY_OF_WEEK,-1)
+        calendar.add(Calendar.DAY_OF_WEEK, -1)
         val newDate = calendar.time
         val formatDate: String = formatter.format(newDate)
         return formatDate
@@ -35,7 +35,7 @@ object Constant {
         val date = Date()
         val calendar = Calendar.getInstance()
         calendar.time = date
-        calendar.add(Calendar.DAY_OF_WEEK,-2)
+        calendar.add(Calendar.DAY_OF_WEEK, -2)
         val newDate = calendar.time
         val formatDate: String = formatter.format(newDate)
         return formatDate
