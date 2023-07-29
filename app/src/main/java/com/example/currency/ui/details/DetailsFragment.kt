@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -120,14 +121,14 @@ class DetailsFragment : Fragment() {
                                 listOfRatesTo.add(Entry(0f, values.get(0).toString().toFloat()))
                                 binding.to.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
                                 )
-                                setLineChart()
+                              //  setLineChart()
 
                             }
                             Constant.getLastDay() -> {
                                 listOfRatesTo.add(Entry(1f, values.get(0).toString().toFloat()))
                                 binding.toYesterday.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
                                 )
-                                setLineChart()
+                              setLineChart()
 
                             }
                             Constant.getLast2Days() -> {
@@ -175,7 +176,7 @@ class DetailsFragment : Fragment() {
                             }
                             Constant.getLast2Days() -> {
                                 listOfRatesFrom.add(Entry(2f, values.get(0).toString().toFloat()))
-                                setLineChart()
+                               // setLineChart()
 
                             }
                         }
@@ -231,6 +232,7 @@ class DetailsFragment : Fragment() {
         dataSets.add(lineDataSet2)
         dataSets.add(lineDataSet)
 
+        //binding.lineChart.axisRight.setEnabled(false)
 
         val xAxis = binding.lineChart.xAxis
         xAxis.valueFormatter = MyValueFormatter()
@@ -279,6 +281,9 @@ class DetailsFragment : Fragment() {
             }
         }
     }
-
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
 
 }
