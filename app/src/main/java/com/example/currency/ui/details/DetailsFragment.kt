@@ -8,14 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currency.R
 import com.example.currency.data.data.api.Constant
 import com.example.currency.data.data.viewModel.MainViewModel
 import com.example.currency.databinding.FragmentDetailBinding
@@ -24,10 +21,11 @@ import com.example.currency.ui.mainFragment.Companion.selectedCurrencyFrom
 import com.example.currency.ui.mainFragment.Companion.selectedCurrencyTo
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.gson.Gson
@@ -35,6 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -121,7 +120,7 @@ class DetailsFragment : Fragment() {
                                 listOfRatesTo.add(Entry(0f, values.get(0).toString().toFloat()))
                                 binding.to.setText(selectedCurrencyTo + " " + ":" + " " + values.get(0)
                                 )
-                              //  setLineChart()
+                               setLineChart()
 
                             }
                             Constant.getLastDay() -> {
@@ -176,7 +175,7 @@ class DetailsFragment : Fragment() {
                             }
                             Constant.getLast2Days() -> {
                                 listOfRatesFrom.add(Entry(2f, values.get(0).toString().toFloat()))
-                               // setLineChart()
+                                setLineChart()
 
                             }
                         }
@@ -219,8 +218,10 @@ class DetailsFragment : Fragment() {
         lineDataSet.valueTextColor = Color.GRAY
         lineDataSet.mode = LineDataSet.Mode.LINEAR
          lineDataSet.setDrawFilled(true)
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT)
 
-         val lineDataSet2 = LineDataSet(listOfRatesFrom, selectedCurrencyTo)
+
+        val lineDataSet2 = LineDataSet(listOfRatesFrom, selectedCurrencyTo)
         lineDataSet2.fillAlpha = 110
         lineDataSet2.lineWidth = 2f
         lineDataSet2.color = Color.RED
@@ -228,17 +229,21 @@ class DetailsFragment : Fragment() {
         lineDataSet2.valueTextColor = Color.RED
         lineDataSet2.mode = LineDataSet.Mode.LINEAR
        lineDataSet2.setDrawFilled(true)
+        lineDataSet2.setAxisDependency(YAxis.AxisDependency.LEFT)
 
-        dataSets.add(lineDataSet2)
+
         dataSets.add(lineDataSet)
+        dataSets.add(lineDataSet2)
 
         //binding.lineChart.axisRight.setEnabled(false)
+
 
         val xAxis = binding.lineChart.xAxis
         xAxis.valueFormatter = MyValueFormatter()
         xAxis.isGranularityEnabled = true
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.labelCount = 3
+      //  xAxis.setGranularity(0.000f) // minimum axis-step (interval) is 1
         xAxis.labelRotationAngle = -90f
 
         binding.lineChart.setDescription(null)
@@ -249,6 +254,8 @@ class DetailsFragment : Fragment() {
         binding.lineChart.setScaleEnabled(true)
         binding.lineChart.isEnabled = true
         binding.lineChart.data = lineData
+
+
         if (listOfRatesFrom.size == 3 && listOfRatesTo.size == 3) {
             binding.lineChart.invalidate()
             Log.e("ListFrom", listOfRatesFrom.get(0).toString())
@@ -264,13 +271,7 @@ class DetailsFragment : Fragment() {
 
     }
 
-
-    class MyValueFormatter() : ValueFormatter() {
-
-        override fun getFormattedValue(value: Float): String {
-            return value.toString()
-        }
-
+     class MyValueFormatter() : ValueFormatter() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun getAxisLabel(value: Float, axis: AxisBase): String {
             return when (value) {
