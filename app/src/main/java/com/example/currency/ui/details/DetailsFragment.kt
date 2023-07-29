@@ -25,9 +25,9 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.EntryXComparator
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
@@ -205,7 +205,6 @@ class DetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setLineChart() {
 
-
         binding.lineChart.setDragEnabled(true)
         binding.lineChart.setScaleEnabled(false)
         val dataSets = arrayListOf<ILineDataSet>()
@@ -243,7 +242,7 @@ class DetailsFragment : Fragment() {
         xAxis.isGranularityEnabled = true
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.labelCount = 3
-      //  xAxis.setGranularity(0.000f) // minimum axis-step (interval) is 1
+        xAxis.setGranularity(0.000f) // minimum axis-step (interval) is 0.000
         xAxis.labelRotationAngle = -90f
 
         binding.lineChart.setDescription(null)
@@ -257,14 +256,10 @@ class DetailsFragment : Fragment() {
 
 
         if (listOfRatesFrom.size == 3 && listOfRatesTo.size == 3) {
-            binding.lineChart.invalidate()
-            Log.e("ListFrom", listOfRatesFrom.get(0).toString())
-            Log.e("ListFrom", listOfRatesFrom.get(1).toString())
-            Log.e("ListFrom", listOfRatesFrom.get(2).toString())
+            Collections.sort(listOfRatesFrom , EntryXComparator())
+            Collections.sort(listOfRatesTo , EntryXComparator())
 
-            Log.e("ListTo", listOfRatesTo.get(0).toString())
-            Log.e("ListTo", listOfRatesTo.get(1).toString())
-            Log.e("ListTo", listOfRatesTo.get(2).toString())
+            binding.lineChart.invalidate()
 
         }
 
