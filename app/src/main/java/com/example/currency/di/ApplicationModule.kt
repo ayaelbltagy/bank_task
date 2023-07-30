@@ -26,35 +26,22 @@ import javax.net.ssl.SSLException
 @InstallIn(SingletonComponent::class)
 class ApplicationModule {
 
-    companion object{
-        val access_key = "0d1a3e7af52c268e9ad4e1598a0a1053"
 
-    }
-
-    private val CONTENT_TYPE = "Content-Type"
-    private val CONTENT_TYPE_VALUE = "application/json"
     private val TIMEOUT_CONNECT = 30   //In seconds
     private val TIMEOUT_READ = 30   //In seconds
 
     @Provides
-    fun provideBaseUrl() = "http://data.fixer.io/api/"
+    fun provideBaseUrl() = "https://data.fixer.io/api/"
 
     private val okHttpBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
 
     private var headerInterceptor = Interceptor { chain ->
         val original = chain.request()
-
         val request = original.newBuilder()
-
-//        request.header(CONTENT_TYPE, CONTENT_TYPE_VALUE)
-//        request.header("Accept", CONTENT_TYPE_VALUE)
-  //      request.header("access_key", "0d1a3e7af52c268e9ad4e1598a0a1053"  )
         request.method(original.method, original.body)
 
         try {
-            // Check network connectivity
             if (!isNetworkConnected()) {
-                // Handle network not connected scenario
                 throw IOException("Network not connected")
             }
 
@@ -62,19 +49,14 @@ class ApplicationModule {
 
             response
         } catch (e: SSLException) {
-            // Handle SSLException
             e.printStackTrace()
-            // Log the error or perform any necessary actions
             throw IOException("SSLException occurred: ${e.message}")
         } catch (e: IOException) {
-            // Handle IOException
             e.printStackTrace()
-            // Log the error or perform any necessary actions
             throw e
         }
     }
 
-    // Helper function to check network connectivity
     @SuppressLint("MissingPermission")
     private fun isNetworkConnected(): Boolean {
         val connectivityManager =

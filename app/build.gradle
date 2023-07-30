@@ -18,7 +18,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -38,7 +38,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
+
+
 
 dependencies {
 
@@ -46,6 +51,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -79,5 +85,24 @@ dependencies {
 
     // Spinner style
     implementation "com.github.skydoves:powerspinner:1.2.4"
+
+    // chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //  dependencies coroutines testing
+    testImplementation  "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    //  dependencies InstantTaskExecutorRule
+    testImplementation   "androidx.arch.core:core-testing:2.2.0"
+
+    // truth
+    testImplementation 'com.google.truth:truth:1.1.3'
+
+    //Mock
+    testImplementation 'io.mockk:mockk:1.13.4'
+
+    testImplementation ('org.junit.jupiter:junit-jupiter:5.6.0')
+
+    testImplementation "org.mockito:mockito-inline:3.11.2"
+
 
 }
