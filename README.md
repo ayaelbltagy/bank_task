@@ -25,3 +25,10 @@ In second page show to top 10 popular  currencies and chart show relation betwee
 
 -view model testing
 
+#6. demo link :
+https://www.mediafire.com/file/3ax76yfghbng7on/WhatsApp_Video_2023-07-30_at_10.49.00_AM.mp4/file
+#7 .screen shot :
+https://www.mediafire.com/file/5tytx6rqvydvdsq/record.png/file
+
+
+
